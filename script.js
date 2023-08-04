@@ -6,12 +6,20 @@ const search = document.getElementById('search')
 
 getUser('k0st90')
 
-async function getUser(user) {
-    const resp = await fetch(APIURL + user)
+async function getUser(username) {
+    const resp = await fetch(APIURL + username)
     const respData = await resp.json()
-    console.log(respData)
-
+    
     createUserCard(respData)
+
+    getRepos(username)
+}
+
+async function getRepos(username) {
+    const resp = await fetch(APIURL + username + "/repos")
+    const respData = await resp.json()
+
+    addReposToCard(respData)
 }
 
 function createUserCard(user) {
@@ -30,11 +38,29 @@ function createUserCard(user) {
                     <li>${user.public_repos}<strong>Repos</strong></li>
                 </ul>
 
-                <ul class='repos' id='repos'></ul>
+                <div id='repos'></div>
             </div>
         </div>
     `
     main.innerHTML = cardHTML
+}
+
+function addReposToCard(repos) {
+    const reposEL = document.getElementById('repos')
+
+    repos
+        .sort((a, b) => b.stargazers_count - a.stargazers_count)
+        .slice(0, 10)
+        .forEach((repo) => {
+            const repoEL = document.createElement("a")
+            repoEL.classList.add('repo')
+
+            repoEL.href = repo.html_url
+            repoEL.target = "_blank"
+            repoEL.innerText = repo.name
+
+            reposEL.appendChild(repoEL)
+        });
 }
 
 form.addEventListener('submit', (e) => {
