@@ -8,5 +8,10 @@ body {
     background-color: #2a2a72;
     background-image: linear-gradient(315deg, #2a2a72 0%, #009ffd 74%);
     font-family: "Poppins", sans-serif;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     margin: 0;
 }
